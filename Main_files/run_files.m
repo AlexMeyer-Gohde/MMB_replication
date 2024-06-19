@@ -18,8 +18,8 @@ replication_directory_name = 'replication';
 overview_table_input_file = 'overview_out.xlsx';
 final_file_all='Result_allmodels.xlsx';
 final_file_worked='Result_worked_models';
-matfile_all='First_Run_AMG_JS.mat';
-matfile_worked='First_Run_AMG_JS_worked.mat';
+matfile_all='AMG_Results.mat';
+matfile_worked='AMG_Results_worked.mat';
 % Inputs Ende --------------------------
 
 % create a test environment for the research routine
@@ -47,8 +47,8 @@ replication_directory_name = 'replication';
 overview_table_input_file = 'overview_out.xlsx';
 final_file_all='Result_allmodels.xlsx';
 final_file_worked='Result_worked_models.xlsx';
-matfile_all='First_Run_AMG_JS.mat';
-matfile_worked='First_Run_AMG_JS_worked.mat';
+matfile_all='AMG_Results.mat';
+matfile_worked='AMG_Results_worked.mat';
 copyfile( [folder_routine_exec '\' final_file_all]);   
 copyfile( [folder_routine_exec '\' final_file_worked]);   
 copyfile( [folder_routine_exec '\' matfile_worked]); 
@@ -61,8 +61,8 @@ replication_directory_name = 'replication';
 overview_table_input_file = 'overview_out.xlsx';
 final_file_all='Result_allmodels.xlsx';
 final_file_worked='Result_worked_models';
-matfile_all='First_Run_AMG_JS.mat';
-matfile_worked='First_Run_AMG_JS_worked.mat';
+matfile_all='AMG_Results.mat';
+matfile_worked='AMG_Results_worked.mat';
 copyfile( [folder_routine_exec '\' final_file_all]);   
 copyfile( [folder_routine_exec '\' matfile_all]);  
 end

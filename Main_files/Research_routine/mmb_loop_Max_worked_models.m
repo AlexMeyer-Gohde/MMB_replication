@@ -71,16 +71,13 @@ try
     AMG_Results(1,:,loop_k)=[M_.nstatic, M_.nfwrd, M_.npred, M_.nboth, M_.nsfwrd, M_.nspred, M_.ndynamic];
     
     
-    [matrix_quadratic, jacobia_]=create_reduced_matrix_quadratic_from_dynare(M_,oo_);
-    
-    %tic; [info, oo_, options_]  = stoch_simul(M_, options_, oo_, var_list_); toc    
-     tic; for jj=1:run_time_reps; [dr,info] = dyn_first_order_solver(jacobia_,M_,oo_.dr,options_,0); end;   AMG_Results(2,1,loop_k) = toc/run_time_reps;   
-    
-     
-     
-    ALPHA_ZS_dynare=[zeros(M_.endo_nbr,M_.nstatic) oo_.dr.ghx zeros(M_.endo_nbr,M_.nfwrd)];
-    X_dynare=ALPHA_ZS_dynare;
-    matrix_quadratic.X=ALPHA_ZS_dynare;
+create_matrix_quadratic_from_dynare;
+
+BETA_ZS_dynare=oo_.dr.ghu(oo_.dr.inv_order_var,:);%BETA_ZS_dynare=BETA_ZS_dynare(1:2,:);
+ALPHA_ZS_dynare=[zeros(n,nstatic) oo_.dr.ghx zeros(n,nfwrd)];
+ALPHA_ZS_dynare=ALPHA_ZS_dynare(oo_.dr.inv_order_var,oo_.dr.inv_order_var);%ALPHA_ZS_dynare=ALPHA_ZS_dynare(1:2,1:2);
+matrix_quadratic.P=ALPHA_ZS_dynare;
+matrix_quadratic.Q=BETA_ZS_dynare;
     try
     if M_.endo_nbr>100; [errors]=dsge_backward_errors_condition_sparse_minimal(matrix_quadratic); else [errors]=dsge_backward_errors_condition_full(matrix_quadratic);end
     AMG_Results(3:end,1:5,loop_k)=errors;
@@ -103,7 +100,7 @@ fprintf('End of iteration %1$3.i of %2$3.i, Model: %3$s, Completion: %4$3.1f %%\
         iter_count,numel(model_indexes),mmb_vec{loop_k},100*(iter_count)/(numel(model_indexes)))
 %save certain results somewhere
 % MTCHANGE: include loop_start, loop_end, iter_count and model_indexes, include ot
-clearvars -except loop_k loop_n loop_start loop_end iter_count model_indexes ot AMG_JS_Results YourPath mmb_vec run_time_reps newton_options
+clearvars -except loop_k loop_n loop_start loop_end iter_count model_indexes ot AMG_Results YourPath mmb_vec run_time_reps newton_options
 
 end
 % MTCHANGE: Export info on errors in overview table
@@ -111,5 +108,5 @@ end
 new_table = ot(~(ot.error_flag==1 | ot.model_folder_exists==0),:); 
 writetable(new_table,'Result_worked_models.xlsx','Sheet','Info');
 % MTCHANGE: save results outside of the foor loop
-clearvars -except AMG_JS_Results YourPath mmb_vec run_time_reps newton_options
-save First_Run_AMG_JS_worked
+clearvars -except AMG_Results YourPath mmb_vec run_time_reps newton_options
+save AMG_Results
